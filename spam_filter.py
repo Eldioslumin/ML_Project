@@ -122,8 +122,9 @@ def plot_results(accuracy, precision, recall, auc, confusion_matrix, model_name)
     
     # Add value labels on bars
     for bar, value in zip(bars, values):
-        ax2.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.01, 
-                f'{value:.3f}', ha='center', va='bottom')
+        ax2.text(bar.get_x() + bar.get_width()/2, 
+                 bar.get_height() - 0.05, 
+                 f'{value:.3f}', ha='center', va='bottom', fontsize=10)
     
     plt.tight_layout()
     
