@@ -56,7 +56,7 @@ def create_holdout_split(X, y, test_size=0.2, random_state=SEED):
 
 
 
-def find_optimal_threshold(model, X_validation, y_validation, limit_fp_rate=0.002):
+def find_optimal_threshold(model, name, X_validation, y_validation, limit_fp_rate=0.002):
 
     y_probability = model.predict_proba(X_validation)[:, 1]
     fp_rate, recall, thresholds = roc_curve(y_validation, y_probability)
@@ -77,7 +77,7 @@ def find_optimal_threshold(model, X_validation, y_validation, limit_fp_rate=0.00
     # First we find our fp rate that actually complies with the company's limit.
     # Then we check which limit also comes with the best recall possible
     # since it is a kind of secondary mission for us.
-
+    print(f"{name} threshold: {thresholds_valid[best]}")
     return thresholds_valid[best]
 
 
@@ -164,7 +164,6 @@ def main():
     }
     # Then we select all models we will use.
     # The advantage of using all models from sklearn is that they all use similar functions to get results/evaluate
-    # so my life is easier.
     
     best = { 
     "best_recall" : 0,
@@ -173,16 +172,15 @@ def main():
     }
     
     for name, model in models.items(): 
-          
-        model.fit(X_train, y_train)
-        threshold = find_optimal_threshold(model, X_validation, y_validation)
-        
-        accuracy, precision, recall, fp_rate, confusion_matrix, auc = evaluate_model(model, X_test, y_test, threshold)
-        
         # 1) We train our models.
         # 2) Find the best threshold for them.
         # 3) Evaluate them.
         
+        model.fit(X_train, y_train)
+        
+        threshold = find_optimal_threshold(model, name, X_validation, y_validation)
+        
+        accuracy, precision, recall, fp_rate, confusion_matrix, auc = evaluate_model(model, X_test, y_test, threshold)
         
         print(f"\n{name} Results:")
         print(f"Accuracy: {accuracy:.3f}")
@@ -209,7 +207,8 @@ def main():
         
         
     if best['best_model'] is None:
-            print("No model was found to meet the company's requirements. :-(")        
+            print("No model was found to meet the company's requirements. :-(")   
+            return 1     
                 
                 
     print(f"\nThe best model during test is {best['best_model']}")
