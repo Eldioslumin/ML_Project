@@ -2,9 +2,8 @@ from scipy.io import loadmat
 from sklearn.feature_extraction.text import TfidfTransformer
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import MultinomialNB
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report, confusion_matrix, recall_score, roc_curve, roc_auc_score, average_precision_score
+from sklearn.metrics import confusion_matrix, roc_curve, roc_auc_score
 import matplotlib.pyplot as plt
 from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
